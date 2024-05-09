@@ -12,7 +12,6 @@ export class CatsService {
   // create a *method* that creates a new cat and adds it to the cats array
   create(cat: Cat) {
     this.cats.push(cat);
-    console.log(this.cats, 'this.cats');
   }
 
   findAll(): Cat[] {

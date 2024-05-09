@@ -5,6 +5,8 @@ import {
   Get,
   Header,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -35,7 +37,43 @@ export class CatsController {
   //   }
   // }
   async findAll(): Promise<Cat[]> {
-    return this.catsService.findAll();
+    try {
+      // return this.catsService.findAll();
+      // Simulate an error condition by throwing an error
+      throw new Error('Simulated error in findAll method');
+    } catch (error) {
+      // throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          // BAD_REQUEST 400
+          // FORBIDDEN 403
+          // UNAUTHORIZED 401
+          // NOT_FOUND 404
+          // NOT_ACCEPTABLE 406
+          // REQUEST_TIMEOUT 408
+          // CONFLICT 409
+          // GONE 410
+          // HTTP_VERSION_NOT_SUPPORTED 505
+          // PAYLOAD_TOO_LARGE 413
+          // UNSUPPORTED_MEDIA_TYPE 415
+          // UNPROCESSABLE_ENTITY 422
+          // INTERNAL_SERVER_ERROR 500
+          // NOT_IMPLEMENTED 501
+          // I_AM_A_TEAPOT 418
+          // METHOD_NOT_ALLOWED 405
+          // BAD_GATEWAY 502
+          // SERVICE_UNAVAILABLE 503
+          // GATEWAY_TIMEOUT 504
+          // PRECONDITION_FAILED 412
+          error: `This is a custom message`,
+        },
+        HttpStatus.FORBIDDEN,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
   @Get(':id')
