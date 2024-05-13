@@ -8,6 +8,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -76,8 +77,24 @@ export class CatsController {
     }
   }
 
+  // ValidationPipe
+  // ParseIntPipe
+  // ParseFloatPipe
+  // ParseBoolPipe
+  // ParseArrayPipe
+  // ParseUUIDPipe
+  // ParseEnumPipe
+  // DefaultValuePipe
+  // ParseFilePipe
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  // findOne(@Param('id', ParseIntPipe) id: string) => "error":"bad request"
+  findOne(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }), // => "error":"Not Acceptable"
+    )
+    id: string,
+  ) {
     return `This action returns a #${id} cat`;
   }
 
