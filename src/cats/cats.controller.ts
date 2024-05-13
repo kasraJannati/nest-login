@@ -11,12 +11,18 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateCatDto, UpdateCatDto } from './create-cate.dto';
 import { Cat } from './cat.interface';
 import { CatsService } from './cats.service';
+import { RolesGuard } from 'src/roles/roles.guard';
+import { Roles } from 'src/roles/roles.decorator';
 
 @Controller('cats')
+@UseGuards(RolesGuard) // add guard to every handler by this controller,
+// if you wish to apply to a single method, use @UseGuards decorator at the method level.
+// @UseGuards(new RolesGuard())
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
@@ -25,8 +31,8 @@ export class CatsController {
   // You can override this behavior by using the @HttpCode() decorator.
   @HttpCode(204)
   @Header('Cache-Control', 'none') // To specify a custom response header
+  @Roles('admin') // We have a cutome @Roles() decorator, we can use it to decorate the create() method.
   async create(@Body() createCatDto: CreateCatDto) {
-    console.log(createCatDto, 'createCatDto');
     this.catsService.create(createCatDto);
   }
 
@@ -39,9 +45,9 @@ export class CatsController {
   // }
   async findAll(): Promise<Cat[]> {
     try {
-      // return this.catsService.findAll();
+      return this.catsService.findAll();
       // Simulate an error condition by throwing an error
-      throw new Error('Simulated error in findAll method');
+      // throw new Error('Simulated error in findAll method');
     } catch (error) {
       // throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
       throw new HttpException(
