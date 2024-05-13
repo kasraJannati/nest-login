@@ -12,17 +12,23 @@ import {
   Post,
   Put,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateCatDto, UpdateCatDto } from './create-cate.dto';
 import { Cat } from './cat.interface';
 import { CatsService } from './cats.service';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Roles } from 'src/roles/roles.decorator';
+import { LoggingInterceptor } from 'src/logging/logging.interceptor';
 
 @Controller('cats')
 @UseGuards(RolesGuard) // add guard to every handler by this controller,
 // if you wish to apply to a single method, use @UseGuards decorator at the method level.
 // @UseGuards(new RolesGuard())
+
+@UseInterceptors(LoggingInterceptor)
+// @UseInterceptors(new LoggingInterceptor())
+// if you wish to apply to a single method, use @UseInterceptors decorator at the method level.
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
