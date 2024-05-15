@@ -5,9 +5,27 @@ import { LoginController } from './login/login.controller';
 import { DogsController } from './dogs/dogs.controller';
 import { CatsModule } from './cats/cats.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Users } from './users/user.entity';
 @Module({
-  imports: [CatsModule],
+  imports: [
+    CatsModule,
+    AuthModule,
+    UsersModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      password: '',
+      username: 'kasra',
+      entities: [Users],
+      database: 'pgWithNest',
+      synchronize: true,
+      logging: true,
+    }),
+  ],
   controllers: [AppController, LoginController, DogsController],
   providers: [AppService],
 })
